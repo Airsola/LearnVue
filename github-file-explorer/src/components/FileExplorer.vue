@@ -130,12 +130,13 @@
         this.path = '/';
         this.getFiles();
       },
-      created: function() {
+
+    },
+
+   created: function() {
       if (this.username && this.repo) this.getFiles();
     } 
-     
-    },
-   
+        
 
   };
 </script>
