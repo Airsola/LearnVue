@@ -11,12 +11,22 @@
     <!-- it's representing, so that its content can be dynamic -->
 
     <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
-
+   
   </ol>
+  <span v-once>This will never change: {{ msg   }}</span>
+  <span >This will can change: {{ msgchange   }}</span>
+
+
 </div>
+
+
+<div id="divcone">  
+</div>      
+
  
 //这个是最简单的写法也是最实际的写法
   <script>
+
     Vue.component('todo-item', {
       props: ['todo'],
       template: '<li>{{ todo.text }}</li>'
@@ -24,8 +34,11 @@
 
 
     var app7 = new Vue({
+      name:"app-7",
       el: '#app-7',
       data: {
+        msg:"first",
+        msgchange:"canChange",
         groceryList: [
         { text: 'Vegetables' },
         { text: 'Cheese' },
@@ -33,6 +46,8 @@
         ]
       }
     })
+
+
 
   </script>
 
