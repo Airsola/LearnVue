@@ -1,0 +1,20 @@
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <script type="text/javascript" src="vue.js"></script>
+    </head>
+    <body>
+  <div id="test">
+  <p>User: {{ username }}</p>
+  </div>
+          <script>
+      test = new Vue({  // 1 — Instantiate a vue instance
+        el: '#test',
+        data: {
+          username: "Luke Skywalker"
+        }
+      });
+        </script>
+    </body>
+</html>
