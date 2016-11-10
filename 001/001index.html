@@ -2,29 +2,84 @@
 <head>
   <meta charset="utf-8">
   <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+
+  <!-- axios  Ajax 使用库横项测评  -->
+  <!-- <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script> -->
+
+<style type="text/css">
+
+.needClass{
+  color: blue;
+  background-color: green;
+  font-size:100px;
+
+} 
+
+</style>
+
+
 </head>
 <body>
 
   <div id="app-7">
-  <ol>
-    <!-- Now we provide each todo-item with the todo object    -->
-    <!-- it's representing, so that its content can be dynamic -->
+    <ol>
+      <!-- Now we provide each todo-item with the todo object    -->
+      <!-- it's representing, so that its content can be dynamic -->
 
-    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
-   
-  </ol>
-  <span v-once>This will never change: {{ msg   }}</span>
-  <span >This will can change: {{ msgchange   }}</span>
+      <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+
+    </ol>
+    <span v-once>This will never change: {{ msg   }}</span>
+    <span >This will can change: {{ msgchange   }}</span>
+    <span >What time is it: {{ now }}</span>
+
+    <div  class="needClass" v-bind:class="{ active: isActive, 'text-danger': hasError }"> dyn class </div>
+
+    <!-- 这种将css也打包成对象的写法似乎更清晰  这个classObject拿来当做计算属性也似乎更合适 -->
+    <div  class="needClass" :class="classObject"> dyn class2 </div>
+
+    <div v-bind:style = "{ color: activeColor, fontSize: fontSize + 'px' }">  dyn Css </div>
+
+    <!-- 可以看出 v-bind 的 Style 是优先级最高的 相当于内嵌的css -->
+    <div  class="needClass" v-bind:style = "[styleObject1]">  dyn Css </div>
 
 
-</div>
+<!-- <iframe id="iframe">
+
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+      </head>
+      <body>
+        <span id="inner">inner frame</span>
+
+        <script >
+          var innerFrame = new Vue({
+            name:"innerFrame",
+            el:"#inner"
+            data:{
+              msg :"inner msg"
+            }
+
+          })
+
+        </script>
+      </body>
+      </html>
+
+    </iframe> -->
 
 
-<div id="divcone">  
-</div>      
+  </div>
 
- 
-//这个是最简单的写法也是最实际的写法
+
+  <div id="divcone">  
+  </div>      
+
+
+  //这个是最简单的写法也是最实际的写法
   <script>
 
     Vue.component('todo-item', {
@@ -32,24 +87,72 @@
       template: '<li>{{ todo.text }}</li>'
     })
 
-
     var app7 = new Vue({
+
       name:"app-7",
       el: '#app-7',
       data: {
+
+        classObject: {
+          active: true,
+          'text-Object': true
+        },
+  activeColor: 'red',
+  fontSize: 30,
+
+        styleObject1: {
+           color: 'red',
+          fontSize: '13px'
+        },
+          styleObject2: {
+           color: 'blue',
+          fontSize: '13px'
+        },
+
+
+        isActive: true,
+        hasError: true,
+        firstName: 'Foo',
+        lastName: 'Bar',
         msg:"first",
         msgchange:"canChange",
+
         groceryList: [
         { text: 'Vegetables' },
         { text: 'Cheese' },
         { text: 'Whatever else humans are supposed to eat' }
         ]
-      }
-    })
+
+      },
+
+      computed: {
+
+        //计算属性里面的缓存特性
+        now: function () {
+          return Date.now()
+        },
+
+        //重写setter getter 方法而没有做拟合
+        fullName :{
+        // getter
+        get: function () {
+          return this.firstName + ' ' + this.lastName
+        },
+
+        // setter
+        set: function (newValue) {
+          var names = newValue.split(' ')
+          this.firstName = names[0]
+          this.lastName = names[names.length - 1]
+        }
+
+          }
 
 
+        }
+      })
 
-  </script>
+    </script>
 
-</body>
-</html>
+  </body>
+  </html>
