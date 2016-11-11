@@ -125,6 +125,8 @@
     v-on:keyup.enter="addNewTodo"
     placeholder="添加一个 todo (Add a todo)"
     >
+
+    <input type="text" name="aaaa">
     <ul>
       <li
       is = 'todo-demo'
@@ -146,7 +148,12 @@
   </div>
 
 
+  <!-- v-on 里面是可以直接写逻辑的 不仅仅限于写个方法名 -->
 
+<div id="example-1">
+  <button v-on:click="counter += 1">Add 1</button>
+  <p>The button above has been clicked {{ counter }} times.</p>
+</div>
 
   <script>
 
@@ -254,6 +261,7 @@ computed: {
         ]
       },
       methods: {
+         // 触发事件的时候输入的内容实际上是v-model传递过来的 
         addNewTodo: function () {
           this.todos.push(this.newTodoText)
           this.newTodoText = ''
@@ -262,7 +270,12 @@ computed: {
     })
 
 
-
+var example1 = new Vue({
+  el: '#example-1',
+  data: {
+    counter: 0
+  }
+})
 
   </script>
 
