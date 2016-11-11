@@ -21,7 +21,23 @@
 </head>
 <body>
 
-  <div id="app-7">
+    <!-- 放在这里就会被html 给普通渲染了 -->
+    <div>
+        <childdemo my-message="hello">  </childdemo>
+    </div>
+
+  <!-- <todo-item> </todo-item>> -->
+
+  <div id="app-7"> 
+
+    <!-- 组件一定要在 Vue实例的范围内否则不生效 -->
+        <childdemo :my-message="111">  </childdemo>
+
+
+
+    <input type="number" name="aaaa" v-model="msg">
+    <p>Message is: {{ msg }}</p>
+
     <ol>
       <!-- Now we provide each todo-item with the todo object    -->
       <!-- it's representing, so that its content can be dynamic -->
@@ -84,39 +100,7 @@
   Now you don't
 </div>
 
-
-
-
-
-<!-- <iframe id="iframe">
-
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <title>Document</title>
-      </head>
-      <body>
-        <span id="inner">inner frame</span>
-
-        <script >
-          var innerFrame = new Vue({
-            name:"innerFrame",
-            el:"#inner"
-            data:{
-              msg :"inner msg"
-            }
-
-          })
-
-        </script>
-      </body>
-      </html>
-
-    </iframe> -->
-
-
-  </div>
+</div>
 
 
   <div id="todo-list-example">
@@ -126,20 +110,22 @@
     placeholder="添加一个 todo (Add a todo)"
     >
 
-    <input type="text" name="aaaa">
+    <!-- ul 限制了内部可以包含的元素  需要加上is 属性，否则会出现渲染错误 -->
     <ul>
       <li
       is = 'todo-demo'
-       v-for="(todo, index) in todos"
+      v-for="(todo, index) in todos"
+      <!-- 这里的title是子组件使用 props 属性 -->
       v-bind:title="todo"
       v-on:remove="todos.splice(index, 1)"
       ></li>
     </ul>
 
-   <!-- 另一种写法 -->
-   <ul>
+    <!-- 另一种写法 -->
+    <ul>
       <todo-demo 
-        v-for="(todo, index) in todos"
+      v-for="(todo, index) in todos"
+      
       v-bind:title="todo"
       v-on:remove="todos.splice(index, 1)"
       ></todo-demo>
@@ -150,54 +136,86 @@
 
   <!-- v-on 里面是可以直接写逻辑的 不仅仅限于写个方法名 -->
 
-<div id="example-1">
-  <button v-on:click="counter += 1">Add 1</button>
-  <p>The button above has been clicked {{ counter }} times.</p>
+  <div id="example-1">
+    <button v-on:click="counter += 1">Add 1</button>
+    <p>The button above has been clicked {{ counter }} times.</p>
+  </div>
+
+
+  <div id="selectedTest">
+
+    <select  v-model="selected">
+     <!-- 动态绑定了 option 的 value 值 -->
+     <option v-for="option in options" v-bind:value="option.value">
+      {{ option.text }} - {{option.value}}
+    </option>
+  </select>
+  <span>Selected: {{ selected }}</span>
 </div>
 
-  <script>
 
-    Vue.component('todo-item', {
-      props: ['todo','index'],
-      template: '<li>{{ todo.text }} - {{ index }}</li>'
-    })
+<hr> 
 
-    var app7 = new Vue({
-      name:"app-7",
-      el: '#app-7',
-      data: {
-
-        classObject: {
-          active: true,
-          'text-Object': true
-        },
-        activeColor: 'red',
-        fontSize: 30,
-
-        styleObject1: {
-         color: 'red',
-         fontSize: '13px'
-       },
-       styleObject2: {
-         color: 'blue',
-         fontSize: '13px'
-       },
+<div id="counter-event-example">
+  <p>{{ total }}</p>
+  <button-counter @increment-a="incrementTotal"></button-counter>
+  <button-counter @increment-a="incrementTotal"></button-counter>
+</div>
 
 
-       isActive: true,
-       hasError: true,
-       firstName: 'Foo',
-       lastName: 'Bar',
-       msg:"first",
-       msgchange:"canChange",
 
-       parentAreaMessage: '父作用域',
 
-       groceryList: [
-       { text: 'Vegetables' },
-       { text: 'Cheese' },
-       { text: 'Whatever else humans are supposed to eat' }
-       ],
+<script>
+
+  Vue.component('childdemo', {
+  // camelCase in JavaScript
+  // JavaScript 的驼峰命名
+  props: ['myMessage'],
+  template: '<span> {{myMessage}} </span>'
+})
+
+
+  Vue.component('todo-item', {
+    props: ['todo','index'],
+    template: '<li>{{ todo.text }} - {{ index }}</li>'
+  })
+
+  var app7 = new Vue({
+    name:"app-7",
+    el: '#app-7',
+    data: {
+
+      classObject: {
+        active: true,
+        'text-Object': true
+      },
+      activeColor: 'red',
+      fontSize: 30,
+
+      styleObject1: {
+       color: 'red',
+       fontSize: '13px'
+     },
+     styleObject2: {
+       color: 'blue',
+       fontSize: '13px'
+     },
+
+
+     isActive: true,
+     hasError: true,
+     firstName: 'Foo',
+     lastName: 'Bar',
+     msg:"first",
+     msgchange:"canChange",
+
+     parentAreaMessage: '父作用域',
+
+     groceryList: [
+     { text: 'Vegetables' },
+     { text: 'Cheese' },
+     { text: 'Whatever else humans are supposed to eat' }
+     ],
 
 //     v-if test
 ifok :false,
@@ -239,30 +257,30 @@ computed: {
   })
 
 
-    Vue.component('todo-demo', {
-      template: '\
-      <li>\
-        {{ title }}\
-        <button v-on:click="$emit(\'remove\')">X</button>\
-      </li>\
-      ',
-      props: ['title']
-    })
+  Vue.component('todo-demo', {
+    template: '\
+    <li>\
+      {{ title }}\
+      <button v-on:click="$emit(\'remove\')">X</button>\
+    </li>\
+    ',
+    props: ['title']
+  })
 
 
-    var todoVew = new Vue({
-      el: '#todo-list-example',
-      data: {
-        newTodoText: '',
-        todos: [
-        '洗碗 (Do the dishes)',
-        '倒垃圾 (Take out the trash)',
-        '除草 (Mow the lawn)'
-        ]
-      },
-      methods: {
+  var todoVew = new Vue({
+    el: '#todo-list-example',
+    data: {
+      newTodoText: '',
+      todos: [
+      '洗碗 (Do the dishes)',
+      '倒垃圾 (Take out the trash)',
+      '除草 (Mow the lawn)'
+      ]
+    },
+    methods: {
          // 触发事件的时候输入的内容实际上是v-model传递过来的 
-        addNewTodo: function () {
+         addNewTodo: function () {
           this.todos.push(this.newTodoText)
           this.newTodoText = ''
         }
@@ -270,14 +288,60 @@ computed: {
     })
 
 
-var example1 = new Vue({
-  el: '#example-1',
+  var example1 = new Vue({
+    el: '#example-1',
+    data: {
+      counter: 0
+    }
+  })
+
+
+
+  new Vue({
+    el: '#selectedTest',
+    data: {
+      selected: 'C',
+      options: [
+      { text: 'One', value: 'A' },
+      { text: 'Two', value: 'B' },
+      { text: 'Three', value: 'C' }
+      ]
+    }
+  })
+
+
+//父子组件的信息传递与相互隔离
+Vue.component('button-counter', {
+  template: '<button v-on:click="increment">{{ counter }}</button>',
+  data: function () {
+    return {
+      counter: 0
+    }
+  },
+  methods: {
+    increment: function () {
+      this.counter += 1
+      // 不要使用驼峰命名，不然那个相应链条断了你都没发现
+      this.$emit('increment-a')
+    }
+  },
+})
+new Vue({
+  el: '#counter-event-example',
   data: {
-    counter: 0
+    total: 0
+  },
+  methods: {
+    incrementTotal: function () {
+      this.total += 1
+    }
   }
 })
 
-  </script>
+
+
+
+</script>
 
 </body>
 </html>

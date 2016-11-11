@@ -47,7 +47,6 @@
       };
     },
     
-    //父空间传递数据给子控件
     props: {
       username: {
         type: String,
@@ -59,8 +58,8 @@
       }
     },
    
-    //这个和一般方法也没有区别那
-    computed: {
+ 
+     computed: {
       fullRepoUrl: function() {
         return this.username + '/' + this.repo;
       },
