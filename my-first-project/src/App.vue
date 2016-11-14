@@ -1,23 +1,23 @@
 <template>
   <div id="app">
-    <!--<img src="./assets/logo.png">-->
-    <!--<hello></hello>-->
-    <test101></test101>
+    <img src="./assets/logo.png">
+    <h1>{{ msg }}</h1>
+    <mt-button @click.native="startHacking">Let's do it</mt-button>
   </div>
-
-
-
 </template>
 
 <script>
-import Hello from './components/Hello'
-import test101 from './components/test101'
-
-
 export default {
   name: 'app',
-  components: {
-    test101
+  data () {
+    return {
+      msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods: {
+    startHacking () {
+      this.$toast('It Works!')
+    }
   }
 }
 </script>
@@ -30,5 +30,23 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
 }
 </style>

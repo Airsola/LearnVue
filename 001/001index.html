@@ -1,8 +1,10 @@
 <html>
 <head>
-  <meta charset="utf-8">
-  <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
+  <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+ <!-- 货币转化的外部封装功能 -->
+<script src="https://cdn.rawgit.com/chrisvfritz/5f0a639590d6e648933416f90ba7ae4e/raw/98739fb8ac6779cb2da11aaa9ab6032e52f3be00/currency-validator.js"></script>
   <!-- axios  Ajax 使用库横项测评  -->
   <!-- <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script> -->
 
@@ -15,11 +17,38 @@
 
 } */
 
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s ;
+  /*cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
+}
+.slide-fade-enter, .slide-fade-leave-active {
+  padding-left: 100px;
+  opacity: 0;
+}
+
 </style>
 
 
 </head>
 <body>
+
+
+<div id="example-css">
+  <button @click="show = !show">
+    Toggle render
+  </button>
+  <transition name="slide-fade">
+    <p v-if="show">hello</p>
+  </transition>
+</div>
+
+<hr>
+
+   <div id="example">qqqqq</div>
 
     <!-- 放在这里就会被html 给普通渲染了 -->
     <div>
@@ -30,14 +59,30 @@
 
   <div id="app-7"> 
 
+  <!-- 人工的制造一个递归 溢出的错误  Chrome 会直接报错， Safari 递归渲染 -->  
+  <!-- <stack-overflow></stack-overflow> -->
+
     <!-- 组件一定要在 Vue实例的范围内否则不生效 -->
-        <childdemo :my-message="111">  </childdemo>
+
+         <!-- 这里的my-messsage 子组件要求的是number 而不是 String 所以这里 需要「:my-message」 -->
+        <childdemo :my-message="123">  </childdemo>
 
 
 
     <input type="number" name="aaaa" v-model="msg">
     <p>Message is: {{ msg }}</p>
+     
+    拆解一下v-model 的语法糖 只响应输出
+    <input type="text" name="bbb" :value="msg"  >
 
+    只响应输入
+    <input type="text" name="ccc" @input =" msg = $event.target.value "  >
+    
+    <!-- 或者只响应输入   下面这个示范
+    失败了... -->
+    <!-- <input type="text" name="ddd" @input =" msg = arguments[0] "  > -->
+
+<hr>
     <ol>
       <!-- Now we provide each todo-item with the todo object    -->
       <!-- it's representing, so that its content can be dynamic -->
@@ -96,10 +141,10 @@
   <h1>showok</h1>
   <h1>showok2</h1>
 </div>
-<div v-else>
+<!-- <div v-else>
   Now you don't
 </div>
-
+ -->
 </div>
 
 
@@ -115,7 +160,6 @@
       <li
       is = 'todo-demo'
       v-for="(todo, index) in todos"
-      <!-- 这里的title是子组件使用 props 属性 -->
       v-bind:title="todo"
       v-on:remove="todos.splice(index, 1)"
       ></li>
@@ -123,9 +167,8 @@
 
     <!-- 另一种写法 -->
     <ul>
-      <todo-demo 
+      <todo-demo
       v-for="(todo, index) in todos"
-      
       v-bind:title="todo"
       v-on:remove="todos.splice(index, 1)"
       ></todo-demo>
@@ -134,6 +177,7 @@
   </div>
 
 
+<hr>
   <!-- v-on 里面是可以直接写逻辑的 不仅仅限于写个方法名 -->
 
   <div id="example-1">
@@ -158,19 +202,61 @@
 
 <div id="counter-event-example">
   <p>{{ total }}</p>
+
   <button-counter @increment-a="incrementTotal"></button-counter>
   <button-counter @increment-a="incrementTotal"></button-counter>
 </div>
+
+
+<hr>一个复杂一点点的货币规则
+
+<div id="currencValidate">
+  <currency-input 
+    label="Price" 
+    v-model="price"
+  ></currency-input>
+  <currency-input 
+    label="Shipping" 
+    v-model="shipping"
+  ></currency-input>
+  <currency-input 
+    label="Handling" 
+    v-model="handling"
+  ></currency-input>
+  <currency-input 
+    label="Discount" 
+    v-model="discount"
+  ></currency-input>
+  
+  <p>Total: ${{ total }}</p>
+</div>
+
+
+<hr>
+
+
 
 
 
 
 <script>
 
+
+Vue.component('stack-overflow', {
+name: 'stack-overflow',
+template: '<div><stack-overflow>1</stack-overflow></div>'
+
+})
+
   Vue.component('childdemo', {
   // camelCase in JavaScript
   // JavaScript 的驼峰命名
-  props: ['myMessage'],
+  props: {
+    myMessage :{
+          type: Number,
+          required: true
+    }
+  },
   template: '<span> {{myMessage}} </span>'
 })
 
@@ -338,6 +424,91 @@ new Vue({
   }
 })
 
+////////////
+
+Vue.component('currency-input', {
+  template: '\
+    <div>\
+      <label v-if="label">{{ label }}</label>\
+      $\
+      <input\
+        ref="input"\
+        v-bind:value="value"\
+        v-on:input="updateValue($event.target.value)"\
+        v-on:focus="selectAll"\
+        v-on:blur="formatValue"\
+      >\
+    </div>\
+  ',
+  props: {
+    value: {
+      type: Number,
+      default: 0
+    },
+    label: {
+      type: String,
+      default: ''
+    }
+  },
+
+  mounted: function () {
+    this.formatValue()
+  },
+
+  methods: {
+    updateValue: function (value) {
+      var result = currencyValidator.parse(value, this.value)
+      if (result.warning) {
+        this.$refs.input.value = result.value
+      }
+      this.$emit('input', result.value)
+    },
+    
+
+    // $refs 在组件渲染完成后才会被填充，而且它不是响应式的。它仅仅是一个直接操作子组件的应急手段，你应该避免在模板或计算属性中使用 $refs。
+    formatValue: function () {
+      this.$refs.input.value = currencyValidator.format(this.value)
+    },
+    selectAll: function (event) {
+      // Workaround for Safari bug
+      // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+      setTimeout(function () {
+        event.target.select()
+      }, 0)
+    }
+  }
+})
+
+new Vue({
+  el: '#currencValidate',
+  data: {
+    price: 0,
+    shipping: 0,
+    handling: 0,
+    discount: 0
+  },
+  computed: {
+    total: function () {
+      return ((
+        this.price * 100 + 
+        this.shipping * 100 + 
+        this.handling * 100 - 
+        this.discount * 100
+      ) / 100).toFixed(2)
+    }
+  }
+})
+///////////
+
+new Vue({
+  el: '#example-css',
+  data: {
+    show: true
+  }
+})
+
+
+/////////////
 
 
 
