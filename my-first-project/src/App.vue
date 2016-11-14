@@ -4,7 +4,10 @@
     <h1>{{ msg }}</h1>
     <mt-button @click.native="startHacking">Let's do it</mt-button>
   </div>
+
+
 </template>
+
 
 <script>
 export default {
@@ -20,6 +23,9 @@ export default {
     }
   }
 }
+
+
+
 </script>
 
 <style>
@@ -49,4 +55,6 @@ li {
 a {
   color: #42b983;
 }
+
+
 </style>

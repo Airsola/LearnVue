@@ -8,7 +8,10 @@
   <!-- axios  Ajax 使用库横项测评  -->
   <!-- <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script> -->
 
-  <style type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+
+<style type="text/css">
+
 
 /*.needClass{
   color: blue;
@@ -30,12 +33,134 @@
   opacity: 0;
 }
 
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity 1s ease;
+}
+.component-fade-enter, .component-fade-leave-active {
+  opacity: 0;
+}
+
+
+
+
+
+.no-mode-translate-demo-wrapper {
+  position: relative;
+  height: 18px;
+}
+.no-mode-translate-demo-wrapper button {
+  position: absolute;
+}
+.no-mode-translate-fade-enter-active, .no-mode-translate-fade-leave-active {
+  transition: all 1s;
+}
+.no-mode-translate-fade-enter, .no-mode-translate-fade-leave-active {
+  opacity: 0;
+}
+.no-mode-translate-fade-enter {
+  transform: translateX(31px);
+}
+.no-mode-translate-fade-leave-active {
+  transform: translateX(-31px);
+}
+
+
+
+.list-complete-item {
+  transition: all 1s;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.list-complete-enter, .list-complete-leave-active {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-complete-leave-active {
+  position: absolute;
+}
+
+
+
+/* move 属性平滑过渡效果好
+.list-complete-move {
+  transition: transform 1s;
+}*/
+
+
+/* 这部分就没有 magic move 的效果了
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-active {
+  opacity: 0;
+  transform: translateY(30px);
+}*/
+
 </style>
 
 
 </head>
 <body>
 
+
+
+<div id="list-complete-demo" class="demo">
+  <button v-on:click="shuffle">Shuffle</button>
+  <button v-on:click="add">Add</button>
+  <button v-on:click="remove">Remove</button>
+  <transition-group name="list-complete" tag="p">
+    <span
+      v-for="item in items"
+      v-bind:key="item"
+      class="list-complete-item"
+    >
+      {{ item }}
+    </span>
+  </transition-group>
+</div>
+
+
+<hr>
+ <!-- 平滑切换 -->
+<hr>
+<div id="no-mode-translate-demo" class="demo">
+  <div class="no-mode-translate-demo-wrapper">
+
+   <!-- mode="out-in" 这个参数使得过度元素切分开了 -->
+    <transition name="no-mode-translate-fade" mode="out-in" >
+      <button v-if="on" key="on" @click="on = false">
+        on
+      </button>
+      <button v-else="" key="off" @click="on = true">
+        off
+      </button>
+    </transition>
+  </div>
+</div>
+
+  <hr> 
+
+  <div id="transition-components-demo" class="demo">
+  <input type="radio" value="v-a" id="a" name="view" v-model ="view">
+  <label for="a">A</label>
+  <input type="radio" value="v-b" id="b" name="view"  v-model ="view">
+  <label for="b">B</label> 
+
+  <!-- 动态组件的示范   这种状态下 mode="out-in" 设计显得很合理  -->
+  <transition name="component-fade" mode="out-in">
+    <component v-bind:is="view"></component>
+  </transition>
+
+  </div>
+
+
+<hr>
 
 <div id="example-css">
   <button @click="show = !show">
@@ -240,6 +365,52 @@
 
 
 <script>
+
+new Vue({
+  el: '#list-complete-demo',
+  data: {
+    items: [1,2,3,4,5,6,7,8,9],
+    nextNum: 10
+  },
+  methods: {
+    randomIndex: function () {
+      return Math.floor(Math.random() * this.items.length)
+    },
+    add: function () {
+      this.items.splice(this.randomIndex(), 0, this.nextNum++)
+    },
+    remove: function () {
+      this.items.splice(this.randomIndex(), 1)
+    },
+    shuffle: function () {
+      this.items = _.shuffle(this.items)
+    }
+  }
+})
+
+
+ new Vue({
+  el: '#no-mode-translate-demo',
+  data: {
+    on: false
+  }
+})
+ 
+
+new Vue({
+  el: '#transition-components-demo',
+  data: {
+    view: 'v-a'
+  },
+  components: {
+    'v-a': {
+      template: '<div>Component A</div>'
+    },
+    'v-b': {
+      template: '<div>Component B</div>'
+    }
+  }
+})
 
 
 Vue.component('stack-overflow', {
