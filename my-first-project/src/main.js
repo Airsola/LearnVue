@@ -9,7 +9,7 @@ Vue.use(MintUI)
 Vue.use(VueRouter)
 
 
-const Home = { template: '<div>This is Home</div>' }
+const Home = { template:'<div>This is Home</div>' }
 const Foo = { template: '<div>This is Foo</div>' }
 const Bar = { template: '<div>This is Bar {{ $route.params.id }}</div>' }
 
@@ -25,14 +25,12 @@ const router = new VueRouter({
   ]
 })
 
-
 // 测试Miti UI 使用
 new Vue({
   el: '#app',
+  //这里render的只是一个组件而已 传啥就渲染啥
   render: h => h(App)
 })
-
-
 
 new Vue({
   router,
@@ -48,14 +46,10 @@ new Vue({
       <router-view class="view"></router-view>
     </div>
   `
-}).$mount('#app')
+}).$mount('#app0')
 
 // new Vue({
 //   el: '#app',
 //   template: '<App/>',
 //   components: { App }
 // })
-
-
-
-let abb = 10 
