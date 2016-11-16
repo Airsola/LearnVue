@@ -108,7 +108,9 @@
 </head>
 <body>
 
+<div id="hook-arguments-example" v-demo:hello.a.b="message"></div>
 
+<hr>
 
 <div id="list-complete-demo" class="demo">
   <button v-on:click="shuffle">Shuffle</button>
@@ -365,6 +367,28 @@
 
 
 <script>
+
+
+Vue.directive('demo', {
+  bind: function (el, binding, vnode) {
+    var s = JSON.stringify
+    el.innerHTML =
+      'name: '       + s(binding.name) + '<br>' +
+      'value: '      + s(binding.value) + '<br>' +
+      'expression: ' + s(binding.expression) + '<br>' +
+      'argument: '   + s(binding.arg) + '<br>' +
+      'modifiers: '  + s(binding.modifiers) + '<br>' +
+      'vnode keys: ' + Object.keys(vnode).join(', ')
+  }
+})
+
+new Vue({
+  el: '#hook-arguments-example',
+  data: {
+    message: 'hello!'
+  }
+})
+
 
 new Vue({
   el: '#list-complete-demo',
