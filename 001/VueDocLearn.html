@@ -2,6 +2,10 @@
 <head>
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
+
+  <script src="./flexible.js"></script>
+
+
   <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
  <!-- 货币转化的外部封装功能 -->
 <script src="https://cdn.rawgit.com/chrisvfritz/5f0a639590d6e648933416f90ba7ae4e/raw/98739fb8ac6779cb2da11aaa9ab6032e52f3be00/currency-validator.js"></script>
@@ -81,6 +85,12 @@
 }
 
 
+#testRem{
+
+  background-color: blue;
+  height: 6rem;
+  width: 100%;
+}
 
 /* move 属性平滑过渡效果好
 .list-complete-move {
@@ -107,6 +117,15 @@
 
 </head>
 <body>
+
+
+<div id="testRem">
+  
+
+</div>
+
+
+<hr>
 
 <div id="hook-arguments-example" v-demo:hello.a.b="message"></div>
 
