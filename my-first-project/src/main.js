@@ -3,7 +3,7 @@ import App from './App'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import VueRouter from 'vue-router'
-
+import  TodoList from './todolist'
  
 Vue.use(MintUI)
 Vue.use(VueRouter)
@@ -25,12 +25,21 @@ const router = new VueRouter({
   ]
 })
 
-// 测试Miti UI 使用
+//测试Miti UI 使用
 new Vue({
   el: '#app',
   //这里render的只是一个组件而已 传啥就渲染啥
   render: h => h(App)
 })
+
+//测试Miti UI 使用
+new Vue({
+  el: '#app2',
+  //这里render的只是一个组件而已 传啥就渲染啥
+  render: h => h(TodoList)
+})
+
+
 
 new Vue({
   router,
